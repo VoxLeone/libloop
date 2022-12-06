@@ -1,0 +1,51 @@
+#Python programming language provides the following types of loops to handle looping #requirements. Python provides three ways for executing the loops. While all the ways provide #similar basic functionality, they differ in their syntax and condition checking time.
+
+#While Loop in Python
+
+#In python, a while loop is used to execute a block of statements repeatedly until a given condition #is satisfied. And when the condition becomes false, the line immediately after the loop in the #program is executed.
+#Syntax :
+
+while expression:
+#statement(s)
+#All the statements indented by the same number of character spaces after a programming construct #are considered to be part of a single block of code. Python uses indentation as its method of #grouping statements. 
+#Example: 
+#Python
+
+count = 0
+while (count < 3):
+    count = count + 1
+    print("Hello Loopers!")
+#Output: 
+#Hello Loopers!
+#Hello Loopers!
+#Hello Loopers!
+
+#Using else statement with while loops
+
+#As discussed above, while loop executes the block until a condition is satisfied. When the #condition becomes false, the statement immediately after the loop is executed. 
+#The else clause is only executed when your while condition becomes false. If you break out of the #loop, or if an exception is raised, it won’t be executed. 
+#If else like this:
+if condition:
+# execute these statements
+else:
+# execute these statements
+
+#and while loop like this are similar
+while condition:
+# execute these statements
+else:
+# execute these statements
+#Examples:
+#Python
+
+count = 0
+while (count < 3):
+    count = count + 1
+    print("Hello Geek")
+else:
+    print("In Else Block")
+#Output: 
+#Hello Geek
+#Hello Geek
+#Hello Geek
+#In Else Block
