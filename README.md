@@ -5,10 +5,10 @@
 This is a work in progress.
 
 ---
-```markdown
-# 🌀 Loopy
 
-**Loopy** is a minimal abstraction over Python's `for` loops. It aims to make iteration cleaner, more expressive, and easier to compose — whether you're working with simple ranges or chaining functional operations like `map` and `filter`.
+# 🌀 Libloop
+
+**LibLoop** is a minimal abstraction over Python's `for` loops. It aims to make iteration cleaner, more expressive, and easier to compose — whether you're working with simple ranges or chaining functional operations like `map` and `filter`.
 
 ---
 
@@ -64,6 +64,5 @@ pytest
 ## 📝 License
 
 MIT License. Use freely and make cool stuff.
-```
 
 ---
