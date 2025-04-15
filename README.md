@@ -8,15 +8,15 @@ This is a work in progress.
 
 # 🌀 Libloop
 
-**LibLoop** is a minimal abstraction over Python's `for` loops. It aims to make iteration cleaner, more expressive, and easier to compose — whether you're working with simple ranges or chaining functional operations like `map` and `filter`.
+**LibLoop** is (at this point) a minimal abstraction over Python's `for` loops. It aims to make iteration cleaner, more expressive, and easier to compose — whether you're working with simple ranges or chaining functional operations like `map` and `filter`.
 
 ---
 
 ## 📦 Installation (dev mode)
 
 ```bash
-git clone https://github.com/yourusername/loopy.git
-cd loopy
+git clone https://github.com/VoxLeone/libloop.git
+cd libloop
 pip install -e .
 ```
 
@@ -25,7 +25,7 @@ pip install -e .
 ## 🚀 Quickstart
 
 ```python
-from loopy import Loop
+from libloop import Loop
 
 # Print numbers from 2 to 30 in steps of 3
 Loop(2, 30, 3).print()
