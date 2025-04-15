@@ -35,6 +35,38 @@ Loop(1, 10)
     .map(lambda x: x**2)
     .filter(lambda x: x % 2 == 0)
     .for_each(print)
+
+#********While Loop*********
+
+X = [0]
+
+def condition():
+    return x[0] < 5
+
+def increment():
+    x[0] += 1
+    print(f"x = {x[0]}")
+
+WhileLoop(condition).do(increment).run(delay=1)
+
+#********DoWhileLoop*********
+x = [0]
+
+def increment():
+    x[0] += 2
+    print(f"x = {x[0]}")
+
+DoWhileLoop().do(increment).until(lambda: x[0] > 5).run()
+
+#********repeat_until loop********
+count = [0]
+
+repeat_until(
+    condition_func=lambda: count[0] >= 3,
+    action_func=lambda: (print("Hello"), count.__setitem__(0, count[0]+1)),
+    delay=0.5
+)
+
 ```
 
 ---
