@@ -1,4 +1,3 @@
----
 
 ## 🎒 `libloop`: Python Iterable Flow Toolkit
 
@@ -16,7 +15,7 @@
 
 ---
 
-### 💡 Building Blocks (Suggested Evocative Names)
+### 💡 Building Blocks
 
 | Operation       | Description                           | Evocative Name   |
 | --------------- | ------------------------------------- | ---------------- |
