@@ -1,95 +1,117 @@
 ---
 
-## 📘 `README.md` (Starter)
+## 🎒 `libloop`: Python Iterable Flow Toolkit
 
-This is a work in progress.
-
----
-
-# 🌀 Libloop
-
-**LibLoop** is (at this point) a minimal abstraction over Python's `for` loops. It aims to make iteration cleaner, more expressive, and easier to compose — whether you're working with simple ranges or chaining functional operations like `map` and `filter`.
+**Tagline**: *"Loop less. Flow more."*
 
 ---
 
-## 📦 Installation (dev mode)
+### 🧱 Core Principles
 
-```bash
-git clone https://github.com/VoxLeone/libloop.git
-cd libloop
-pip install -e .
-```
+* Declarative over imperative
+* Chainable, fluent interface
+* Named flows with clear intent (`.drip()`, `.sift()`, `.morph()`)
+* Generator-based and lazy by default
+* Plays nicely with `iter()`, `next()`, `for`, etc.
 
 ---
 
-## 🚀 Quickstart
+### 💡 Building Blocks (Suggested Evocative Names)
+
+| Operation       | Description                           | Evocative Name   |
+| --------------- | ------------------------------------- | ---------------- |
+| `filter()`      | Keep only values matching a predicate | `.sift()`        |
+| `map()`         | Transform each value                  | `.morph()`       |
+| `take(n)`       | Take only first `n` items             | `.drip(n)`       |
+| `skip(n)`       | Skip first `n` items                  | `.shed(n)`       |
+| `flatten()`     | Unpack nested iterables               | `.spill()`       |
+| `unique()`      | Remove duplicates                     | `.distinct()`    |
+| `window(n)`     | Sliding window of `n` values          | `.glimpse(n)`    |
+| `enumerate()`   | Yield `(index, value)`                | `.counted()`     |
+| `zip(other)`    | Combine with another iterable         | `.braid(other)`  |
+| `reduce()`      | Fold into a single value              | `.forge(fn)`     |
+| `chain(*iters)` | Concatenate iterables                 | `.join(*others)` |
+| `peek(fn)`      | Run side-effect fn (for debugging)    | `.tap(fn)`       |
+
+---
+
+### 🧪 Example Usage
 
 ```python
-from libloop import Loop
+from libloop import Flow
 
-# Print numbers from 2 to 30 in steps of 3
-Loop(2, 30, 3).print()
-
-# Print squares of even numbers from 1 to 10
-Loop(1, 10)
-    .map(lambda x: x**2)
-    .filter(lambda x: x % 2 == 0)
-    .for_each(print)
-
-#********While Loop*********
-
-X = [0]
-
-def condition():
-    return x[0] < 5
-
-def increment():
-    x[0] += 1
-    print(f"x = {x[0]}")
-
-WhileLoop(condition).do(increment).run(delay=1)
-
-#********DoWhileLoop*********
-x = [0]
-
-def increment():
-    x[0] += 2
-    print(f"x = {x[0]}")
-
-DoWhileLoop().do(increment).until(lambda: x[0] > 5).run()
-
-#********repeat_until loop********
-count = [0]
-
-repeat_until(
-    condition_func=lambda: count[0] >= 3,
-    action_func=lambda: (print("Hello"), count.__setitem__(0, count[0]+1)),
-    delay=0.5
+flow = (
+    Flow(range(20))
+    .shed(5)             # skip first 5
+    .sift(lambda x: x % 2 == 0)   # keep evens
+    .morph(lambda x: x * 10)
+    .drip(4)             # take first 4 of these
 )
 
+for val in flow:
+    print(val)  # 60, 80, 100, 120
+```
+
+Or for composition:
+
+```python
+values = Flow(range(1, 11)).distinct().morph(str).join(['end']).list()
+print(values)  # ['1', '2', ..., '10', 'end']
 ```
 
 ---
 
-## 🎯 Goals
+### 🧰 Starter Code Skeleton
 
-- ✅ Hide boilerplate `for` syntax
-- ✅ Support easy printing
-- ✅ Add map/filter/for_each methods
-- ⏳ Collect results with `.to_list()`
-- ⏳ Add support for other iterables (e.g. lists, sets)
-- ⏳ Add parallel iteration options
+```python
+class Flow:
+    def __init__(self, iterable):
+        self.iterable = iterable
+
+    def sift(self, fn):
+        return Flow(x for x in self.iterable if fn(x))
+
+    def morph(self, fn):
+        return Flow(fn(x) for x in self.iterable)
+
+    def drip(self, n):
+        def take():
+            count = 0
+            for x in self.iterable:
+                if count < n:
+                    yield x
+                    count += 1
+                else:
+                    break
+        return Flow(take())
+
+    def shed(self, n):
+        def skip():
+            it = iter(self.iterable)
+            for _ in range(n):
+                next(it, None)
+            yield from it
+        return Flow(skip())
+
+    def join(self, *others):
+        from itertools import chain
+        return Flow(chain(self.iterable, *others))
+
+    def list(self):
+        return list(self.iterable)
+
+    def __iter__(self):
+        return iter(self.iterable)
+```
 
 ---
 
-## 🛠️ Dev Notes
+### 🛠 Ideas for Expansion
 
-Test with `pytest`:
-
-```bash
-pip install pytest
-pytest
-```
+* Add `async` support: `AsyncFlow`
+* Integrate with pandas or NumPy for dataframe-like ops
+* Debug chain visualizer: `.trace()` that prints each stage
+* Custom exceptions for bad patterns (e.g., `.drip(-1)`)
 
 ---
 
