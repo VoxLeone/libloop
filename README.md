@@ -1,7 +1,15 @@
 
-## 🎒 `libloop`: Python Iterable Flow Toolkit
+# 🎒 `libloop`: Python Iterable Flow Toolkit
 
 **"Loop less. Flow more."**
+---
+
+## ⚠️ Heads up!
+
+This repository is an open space for exploring experimental, weird, or half-baked concepts in code.
+Things here might break, make no sense, or become something cool later. Or not.
+
+If you're here out of curiosity, feel free to poke around or borrow anything useful. If you're expecting polished code or production readiness… this probably isn't the place (yet). 😄
 
 ---
 
