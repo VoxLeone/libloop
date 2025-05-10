@@ -1,7 +1,7 @@
 
 # 🎒 `libloop`: Python Iterable Flow Toolkit
 
-***"Loop less. Flow more."**
+* **"Loop less. Flow more."**
 ---
 
 ## ⚠️ Heads up!
