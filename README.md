@@ -22,7 +22,7 @@ We're building a Python library that:
 
     Wraps iterable logic into a clean, expressive API: Flow(...).sift(...).morph(...).drip(...)
 
-🧩 What Makes libloop Distinct?
+## 🧩 What Makes libloop Distinct?
 
     It's Pythonic, but inspired by FP-style chains (à la Lodash, RxJS, or LINQ)
 
