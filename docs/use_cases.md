@@ -144,4 +144,3 @@ for s in subjects:
 
 These examples show how `Flow` replaces **nested loops, counters, and conditions** with a more fluent and readable pipeline.
 
-Would you like one tailored for a specific domain—like finance, gaming, NLP, or web dev?
