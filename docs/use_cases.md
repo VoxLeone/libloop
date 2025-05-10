@@ -1,11 +1,13 @@
-## 🌍 Real-World Use Cases for `Flow`
+## Real-World Use Cases for `Flow`
 
-Let's explore **real-world scenarios** where your `Flow` class (from `libloop`) could elegantly replace traditional loops and make the code more readable and declarative.
+
+Suppose you're processing temperature readings and only care about spikes above 75°F, but want to ignore the first 100 readings (warm-up period), and only analyze the first 10 significant spikes:
+
 ---
 
 ### 1. **Filtering Sensor Readings (IoT or Hardware Logs)**
 
-Suppose you're processing temperature readings and only care about spikes above 75°F, but want to ignore the first 100 readings (warm-up period), and only analyze the first 10 significant spikes:
+Let's explore **real-world scenarios** where your `Flow` class (from `libloop`) could elegantly replace traditional loops and make the code more readable and declarative.
 
 ```python
 from libloop.flow import Flow
