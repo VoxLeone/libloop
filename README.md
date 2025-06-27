@@ -1,7 +1,6 @@
 # libloop
 
-**libloop** is a Python library for composable, flexible, and efficient iteration patterns.  
-It provides object-oriented and functional abstractions for classic loops (`for`, `while`, `do-while`), as well as a powerful, lazy, chainable flow API.
+**libloop** is a Python library for composable, flexible, and efficient iteration patterns.  It provides object-oriented and functional abstractions for classic loops (`for`, `while`, `do-while`), as well as a powerful, lazy, chainable flow API.
 
 ## Features
 
