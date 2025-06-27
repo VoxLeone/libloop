@@ -1,150 +1,155 @@
+# libloop
 
-# 🎒 `libloop`: Python Iterable Flow Toolkit
+**libloop** is a Python library for composable, flexible, and efficient iteration patterns.  
+It provides object-oriented and functional abstractions for classic loops (`for`, `while`, `do-while`), as well as a powerful, lazy, chainable flow API.
 
-* **"Loop less. Flow more."**
----
+## Features
 
-## ⚠️ Heads up!
-
-This repository is an open space for exploring experimental, weird, or half-baked concepts in code.
-Things here might break, make no sense, or become something cool later. Or not.
-
-If you're here out of curiosity, feel free to poke around or borrow anything useful. If you're expecting polished code or production readiness… this probably isn't the place (yet). 😄
-
----
-## Rationale
-
-We're building a Python library that:
-
-    Abstracts loops behind chainable, declarative transformations
-
-    Emphasizes flow-style processing like JavaScript's Symbol.iterator or functional pipelines
-
-    Wraps iterable logic into a clean, expressive API: Flow(...).sift(...).morph(...).drip(...)
-
-## 🧩 What Makes libloop Distinct?
-
-    It's Pythonic, but inspired by FP-style chains (à la Lodash, RxJS, or LINQ)
-
-    Encourages loop-free reasoning, which is rare in small Python libs
-
-    Could serve as an expressive, lazy data pipeline tool, especially for devs tired of writing for-loops and if filters manually
+- **Loop Classes:**  
+  OOP wrappers for `for`, `while`, and `do-while` constructs with chainable methods.
+- **Functional Utilities:**  
+  `repeat_until` for concise loop logic.
+- **Lazy, Chainable Flow API:**  
+  The `Flow` class for building composable, memory-efficient pipelines.
+- **Parallelism:**  
+  Opt-in parallel execution for mapping, filtering, and for-each using threads.
+- **Vectorization:**  
+  Opt-in vectorized mapping/filtering for numeric data (requires NumPy).
+- **Thread Safety:**  
+  Internal state is protected for safe use in concurrent scenarios (user code must still be thread-safe).
+- **Extensive Documentation & Type Hints:**  
+  All classes and methods are documented for ease of use and maintenance.
 
 ---
 
-### 🧱 Core Principles
+## Installation
 
-* Declarative over imperative
-* Chainable, fluent interface
-* Named flows with clear intent (`.drip()`, `.sift()`, `.morph()`)
-* Generator-based and lazy by default
-* Plays nicely with `iter()`, `next()`, `for`, etc.
+```bash
+pip install libloop
+```
 
----
+**NumPy is optional.**  
+Install it if you want to enable vectorized operations:
 
-### 💡 Building Blocks
-
-| Operation       | Description                           | Evocative Name   |
-| --------------- | ------------------------------------- | ---------------- |
-| `filter()`      | Keep only values matching a predicate | `.sift()`        |
-| `map()`         | Transform each value                  | `.morph()`       |
-| `take(n)`       | Take only first `n` items             | `.drip(n)`       |
-| `skip(n)`       | Skip first `n` items                  | `.shed(n)`       |
-| `flatten()`     | Unpack nested iterables               | `.spill()`       |
-| `unique()`      | Remove duplicates                     | `.distinct()`    |
-| `window(n)`     | Sliding window of `n` values          | `.glimpse(n)`    |
-| `enumerate()`   | Yield `(index, value)`                | `.counted()`     |
-| `zip(other)`    | Combine with another iterable         | `.braid(other)`  |
-| `reduce()`      | Fold into a single value              | `.forge(fn)`     |
-| `chain(*iters)` | Concatenate iterables                 | `.join(*others)` |
-| `peek(fn)`      | Run side-effect fn (for debugging)    | `.tap(fn)`       |
+```bash
+pip install numpy
+```
 
 ---
 
-### 🧪 Example Usage
+## Usage
+
+### Loop Classes
 
 ```python
-from libloop import Flow
+from libloop import Loop, WhileLoop, DoWhileLoop, repeat_until
 
-flow = (
-    Flow(range(20))
-    .shed(5)             # skip first 5
-    .sift(lambda x: x % 2 == 0)   # keep evens
-    .morph(lambda x: x * 10)
-    .drip(4)             # take first 4 of these
+# For-like loop with chaining
+Loop(0, 10).map(lambda x: x * 2).filter(lambda x: x > 5).for_each(print)
+
+# While loop with actions
+counter = {'val': 0}
+def action():
+    counter['val'] += 1
+WhileLoop(lambda: counter['val'] < 5).do(action).run()
+
+# Do-while loop
+n = {'val': 0}
+def inc(): n['val'] += 2
+def cond(): return n['val'] >= 6
+DoWhileLoop().do(inc).until(cond).run()
+
+# Functional repeat_until
+x = {'val': 0}
+repeat_until(lambda: x['val'] > 3, lambda: x.update(val=x['val'] + 1))
+```
+
+### Flow API
+
+```python
+from libloop.flow import Flow
+
+# Lazy, composable pipelines
+result = (
+    Flow(range(100))
+    .sift(lambda x: x % 3 == 0)
+    .morph(lambda x: x + 1)
+    .drip(10)
+    .list()
 )
-
-for val in flow:
-    print(val)  # 60, 80, 100, 120
+print(result)
 ```
 
-Or for composition:
+### Parallel and Vectorized Operations
 
 ```python
-values = Flow(range(1, 11)).distinct().morph(str).join(['end']).list()
-print(values)  # ['1', '2', ..., '10', 'end']
+import numpy as np
+from libloop import Loop
+from libloop.flow import Flow
+
+# Parallel mapping (using threads)
+Loop(0, 100).map(lambda x: x**2, parallel=True).for_each(print)
+
+# Vectorized mapping (NumPy required)
+Loop(0, 10).map(lambda arr: arr * 3, vectorized=True).for_each(print)
+
+# Flow with vectorized morph
+Flow(range(10)).morph(lambda arr: arr ** 2, vectorized=True).tap(print).list()
 ```
 
 ---
 
-### 🧰 Starter Code Skeleton
+## API Reference
 
-```python
-class Flow:
-    def __init__(self, iterable):
-        self.iterable = iterable
-
-    def sift(self, fn):
-        return Flow(x for x in self.iterable if fn(x))
-
-    def morph(self, fn):
-        return Flow(fn(x) for x in self.iterable)
-
-    def drip(self, n):
-        def take():
-            count = 0
-            for x in self.iterable:
-                if count < n:
-                    yield x
-                    count += 1
-                else:
-                    break
-        return Flow(take())
-
-    def shed(self, n):
-        def skip():
-            it = iter(self.iterable)
-            for _ in range(n):
-                next(it, None)
-            yield from it
-        return Flow(skip())
-
-    def join(self, *others):
-        from itertools import chain
-        return Flow(chain(self.iterable, *others))
-
-    def list(self):
-        return list(self.iterable)
-
-    def __iter__(self):
-        return iter(self.iterable)
-```
+- **Loop(start, end, step=1)**
+  - `.map(func, parallel=False, vectorized=False, max_workers=None)`
+  - `.filter(func, parallel=False, vectorized=False, max_workers=None)`
+  - `.for_each(func, parallel=False, vectorized=False, max_workers=None)`
+  - `.print()`
+- **WhileLoop(condition_func)**
+  - `.do(action_func)`
+  - `.run(delay=0, max_iterations=None, parallel=False, max_workers=None)`
+- **DoWhileLoop()**
+  - `.do(action_func)`
+  - `.until(condition_func)`
+  - `.run(delay=0, max_iterations=None, parallel=False, max_workers=None)`
+- **repeat_until(condition_func, action_func, delay=0, max_iterations=None, parallel=False, max_workers=None)**
+- **Flow(iterable)**
+  - `.sift(fn)`
+  - `.morph(fn, parallel=False, vectorized=False, max_workers=None)`
+  - `.drip(n)`
+  - `.shed(n)`
+  - `.join(*others)`
+  - `.tap(fn)`
+  - `.takewhile(predicate)`
+  - `.dropwhile(predicate)`
+  - `.list()`, `.to_list()`
 
 ---
 
-### 🛠 Ideas for Expansion
+## Thread Safety & Parallelism Notes
 
-* Add `async` support: `AsyncFlow`
-* Integrate with pandas or NumPy for dataframe-like ops
-* Debug chain visualizer: `.trace()` that prints each stage
-* Custom exceptions for bad patterns (e.g., `.drip(-1)`)
+- Internal state of `Loop`, `WhileLoop`, and `DoWhileLoop` is thread-safe.
+- User-supplied functions **must** be thread-safe if parallelism is enabled.
+- `parallel=True` uses threads (good for I/O, general use).
+- For CPU-bound work, process-based parallelism may be supported in future.
+- `vectorized=True` requires NumPy and only works with numeric data.
+
+---
+
+## Contributing
+
+Contributions, bug reports, and feature requests are welcome!  
+See [issues](https://github.com/VoxleOne/libloop/issues).
 
 ---
 
-## 📝 License
+## License
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-MIT License. Use freely and make cool stuff.
+MIT License
 
 ---
+
+## Acknowledgements
+
+Inspired by Python’s built-in functional tools and modern data pipeline libraries.
